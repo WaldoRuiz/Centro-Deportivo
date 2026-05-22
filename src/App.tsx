@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import { authService } from './services/auth'
 import { deportivoService } from './services/deportivoService'
@@ -344,6 +344,7 @@ function AuthPanel({
     telefono: string,
   ) => void
 }) {
+  const [showRegister, setShowRegister] = useState(false)
   const [loginForm, setLoginForm] = useState({ correo: '', password: '' })
   const [registerForm, setRegisterForm] = useState({
     nombre: '',
@@ -352,8 +353,67 @@ function AuthPanel({
     telefono: '',
   })
 
+  if (showRegister) {
+    return (
+      <section className="auth-centered">
+        <form
+          className="panel compact-form"
+          onSubmit={(event) => {
+            event.preventDefault()
+            onRegister(
+              registerForm.nombre,
+              registerForm.correo,
+              registerForm.password,
+              registerForm.telefono,
+            )
+          }}
+        >
+          <h2>Crear cuenta</h2>
+          <input
+            placeholder="Nombre"
+            value={registerForm.nombre}
+            onChange={(event) =>
+              setRegisterForm({ ...registerForm, nombre: event.target.value })
+            }
+          />
+          <input
+            placeholder="Correo"
+            type="email"
+            value={registerForm.correo}
+            onChange={(event) =>
+              setRegisterForm({ ...registerForm, correo: event.target.value })
+            }
+          />
+          <input
+            placeholder="Telefono"
+            value={registerForm.telefono}
+            onChange={(event) =>
+              setRegisterForm({ ...registerForm, telefono: event.target.value })
+            }
+          />
+          <input
+            placeholder="Contraseña"
+            type="password"
+            value={registerForm.password}
+            onChange={(event) =>
+              setRegisterForm({ ...registerForm, password: event.target.value })
+            }
+          />
+          <button disabled={loading}>Crear cuenta</button>
+          <button
+            className="ghost-button"
+            type="button"
+            onClick={() => setShowRegister(false)}
+          >
+            ← Volver a iniciar sesión
+          </button>
+        </form>
+      </section>
+    )
+  }
+
   return (
-    <section className="auth-grid">
+    <section className="auth-centered">
       <form
         className="panel compact-form"
         onSubmit={(event) => {
@@ -361,7 +421,7 @@ function AuthPanel({
           onLogin(loginForm.correo, loginForm.password)
         }}
       >
-        <h2>Iniciar sesion</h2>
+        <h2>Iniciar sesión</h2>
         <input
           placeholder="Correo"
           type="email"
@@ -371,7 +431,7 @@ function AuthPanel({
           }
         />
         <input
-          placeholder="Password"
+          placeholder="Contraseña"
           type="password"
           value={loginForm.password}
           onChange={(event) =>
@@ -379,58 +439,17 @@ function AuthPanel({
           }
         />
         <button disabled={loading}>Entrar</button>
-      </form>
-
-      <form
-        className="panel compact-form"
-        onSubmit={(event) => {
-          event.preventDefault()
-          onRegister(
-            registerForm.nombre,
-            registerForm.correo,
-            registerForm.password,
-            registerForm.telefono,
-          )
-        }}
-      >
-        <h2>Registro de cliente</h2>
-        <input
-          placeholder="Nombre"
-          value={registerForm.nombre}
-          onChange={(event) =>
-            setRegisterForm({ ...registerForm, nombre: event.target.value })
-          }
-        />
-        <input
-          placeholder="Correo"
-          type="email"
-          value={registerForm.correo}
-          onChange={(event) =>
-            setRegisterForm({ ...registerForm, correo: event.target.value })
-          }
-        />
-        <input
-          placeholder="Telefono"
-          value={registerForm.telefono}
-          onChange={(event) =>
-            setRegisterForm({ ...registerForm, telefono: event.target.value })
-          }
-        />
-        <input
-          placeholder="Password"
-          type="password"
-          value={registerForm.password}
-          onChange={(event) =>
-            setRegisterForm({ ...registerForm, password: event.target.value })
-          }
-        />
-        <button disabled={loading}>Crear cuenta</button>
+        <button
+          className="ghost-button"
+          type="button"
+          onClick={() => setShowRegister(true)}
+        >
+          Crear una cuenta
+        </button>
       </form>
     </section>
   )
-}
-
-function Dashboard({
+}function Dashboard({
   actividades,
   reservas,
   reporte,
@@ -852,3 +871,4 @@ function formatearHora(value: string) {
 }
 
 export default App
+

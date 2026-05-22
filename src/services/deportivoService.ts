@@ -67,7 +67,7 @@ export const deportivoService = {
     crear(payload: CrearEntrenador) {
       return apiClient.post<Usuario, CrearEntrenador>(
         API_ENDPOINTS.users.entrenadores,
-        payload,
+        { ...payload, rol: 'Entrenador' },
       )
     },
     actualizar(id: number, payload: Omit<CrearEntrenador, 'password'>) {

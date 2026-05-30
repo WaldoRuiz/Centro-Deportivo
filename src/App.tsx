@@ -1,5 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
+import { ApiError } from './services/api/apiError'
 import { authService } from './services/auth'
 import { deportivoService } from './services/deportivoService'
 import type {
@@ -853,6 +854,7 @@ function ReportesPanel({
 }
 
 function extraerMensaje(error: unknown) {
+  if (error instanceof ApiError && error.data?.mensaje) return error.data.mensaje
   if (error instanceof Error) return error.message
   return 'No se pudo completar la accion.'
 }
@@ -871,4 +873,5 @@ function formatearHora(value: string) {
 }
 
 export default App
+
 
